@@ -25,6 +25,7 @@
 __pycache__
 .ipynb_checkpoints/
 digi_leap.egg-info/
+dist/
 
 # Environment
 .env/

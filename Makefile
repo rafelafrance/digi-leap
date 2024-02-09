@@ -1,4 +1,4 @@
-.PHONY: test install dev venv clean setup_subtrees fetch_subtrees
+.PHONY: test install dev venv clean
 .ONESHELL:
 
 VENV=.venv
