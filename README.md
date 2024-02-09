@@ -162,7 +162,7 @@ There are, of course, complications and subtleties not outlined above, but you s
 Scripts:
 - `parse-labels`: This takes the OCR text files and returns traits associated with the labels.
 - `parse-treatments`: Not relevant here, but this does the same with treatment extracted from PDFs or scraped from the web.
-- `util-add-taxon-terms`: On the off chance that you want to update the catalog of plant terms, you would use this utility.
+- `add-taxa`: On the off chance that you want to update the catalog of plant taxa, you would use this utility.
 
 ### Large language model trait extraction
 
