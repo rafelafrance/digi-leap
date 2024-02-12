@@ -55,8 +55,8 @@ We find labels with a custom trained YOLOv7 model (https://github.com/WongKinYiu
 - All label are extracted into their own image file.
 
 Scripts:
-- `fix-herbarium-sheet-names`: I had a problem where herbarium sheet file names were given as URLs and it confused the Pillow (PIL) module so I renamed the files to remove problem characters. You may not need this script.
-- `yolo-training`: If you are training your own YOLO7 model then you may want to use this script to prepare the images of herbarium sheets for training. The herbarim images may be in all sorts of sizes, and model training requires that they're all uniformly sized.
+- `fix-herbarium-sheet-names`: I had a problem where herbarium sheet file names were given as URLs, and it confused the Pillow (PIL) module, so I renamed the files to remove problem characters. You may not need this script.
+- `yolo-training`: If you are training your own YOLO7 model then you may want to use this script to prepare the images of herbarium sheets for training. The herbarium images may be in all sorts of sizes, and model training requires that they're all uniformly sized.
   - YOLO scripts also requires a CSV file containing the paths to the herbarium sheets and the class and location of the labels on that sheet.
 - `yolo-inference`: Prepare herbarium sheet images for inference; i.e. finding labels. The images must be in the same size the training data.
 - `yolo-results-to-labels`: This takes for output of the YOLO model and creates label images. The label name contains information about the YOLO results. The label name format:
@@ -101,7 +101,7 @@ After you have each label in its own image file, you can extract the text from t
 Image processing techniques:
 
 1. Do nothing to the image. This works best with clean new herbarium sheets.
-2. We slightly blur the image, scale it to a size that works with many OCR images, orient the image to get it rightside up, and then deskew the image to finetune its orientation.
+2. We slightly blur the image, scale it to a size that works with many OCR images, orient the image to get it right-side up, and then deskew the image to finetune its orientation.
 3. We perform all the steps in #2 and additionally perform a Sauvola (Sauvola & Pietikainen, 2000) binarization of the image, which often helps improve OCR results.
 4. We do all the steps in #3, then remove “snow” (image speckles) and fill in any small “holes” in the binarized image.
 
@@ -120,11 +120,11 @@ After the image processing & OCR combinations we then:
 
 1. Perform minor edits to fix some common OCR errors like the addition of spaces before punctuation or common character substitutions.
 2. Next we find the Levenshtein distance for all pairs of text sequences and remove any sequence that has a Levenshtein score greater than a predetermined cutoff (128) from the best Levenshtein score.
-3. The next step in the workflow is to use a Multiple Sequence Alignment (MSA) algorithm that is directly analogous to the ones used for biological sequences but instead of using a PAM or BLOSUM substitution matrix we use a visual similarity matrix. Exact visual similarity depends on the font so an exact distance is not feasible. Instead we use a rough similarity score that ranges from +2, for characters that are identical, to -2, where the characters are wildly different like a period and a W. We also used a gap penalty of -3 and a gap extension penalty of -0.5.
+3. The next step in the workflow is to use a Multiple Sequence Alignment (MSA) algorithm that is directly analogous to the ones used for biological sequences but instead of using a PAM or BLOSUM substitution matrix we use a visual similarity matrix. Exact visual similarity depends on the font so an exact distance is not feasible. Instead, we use a rough similarity score that ranges from +2, for characters that are identical, to -2, where the characters are wildly different like a period and a W. We also used a gap penalty of -3 and a gap extension penalty of -0.5.
 4. Finally, we edit the MSA consensus sequence with a spell checker, add or remove spaces within words, and fix common character substitutions.
 
 Scripts:
-- `ocr-labels`: You feed this label images and it returns the OCRed text.
+- `ocr-labels`: You feed this label images, and it returns the OCRed text.
 - `char-sub-matrix`: You probably won't need this, but it is a utility script for build the substitution matrix for the multiple sequence alignment. The matrix is analogous to a PAM or BLOSUM matrix.
 
 ### Rule based trait extraction
@@ -193,7 +193,7 @@ The old digi_leap repository was taking too long to clone, but I wanted to keep 
 
 #### https://github.com/rafelafrance/traiter.git
 
-This repository is used by the rule-based parser (FloraTraiter). It contains all of the rules and code used by every rule-based parser. For plants, insects, mammals, etc.
+This repository is used by the rule-based parser (FloraTraiter). It contains all the rules and code used by every rule-based parser. For plants, insects, mammals, etc.
 
 #### https://github.com/rafelafrance/common_utils.git
 
