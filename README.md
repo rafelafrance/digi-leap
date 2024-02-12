@@ -7,11 +7,12 @@ Extract information from images of herbarium specimen label sheets. This is the 
 3. [Pipeline outline](#Pipeline-outline)
 4. [References](#References)
 
+## Brief description
+
 Given images like:
 
 [<img src="assets/sheet.jpg" width="500" />](assets/sheet.jpg)
 
-## Brief description
 We want to extract as much text information as possible from the labels. We are mostly targeting labels with typewritten information and not handwritten labels or barcodes, although we may extract some text from barcode labels and some clearly written handwritten text.
 
 ## Install
