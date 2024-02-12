@@ -18,6 +18,7 @@ install: venv
 	$(PIP_INSTALL) $(REPO)/ocr_ensemble.git@main#egg=ocr_ensemble
 	$(PIP_INSTALL) $(REPO)/traiter.git@master#egg=traiter
 	$(PIP_INSTALL) $(REPO)/FloraTraiter.git@main#egg=FloraTraiter
+	$(PIP_INSTALL) $(REPO)/LabelTraiter.git@main#egg=LabelTraiter
 	$(PIP_INSTALL) $(REPO)/traiter_llm.git@main#egg=traiter_llm
 	$(PIP_INSTALL) $(REPO)/reconcile_traits.git@main#egg=reconcile_traits
 	$(PIP_INSTALL) .
@@ -32,7 +33,8 @@ dev: venv
 	$(PIP_INSTALL) -e ../../digi-leap/reconcile_traits
 	$(PIP_INSTALL) -e ../../traiter/traiter
 	$(PIP_INSTALL) -e ../../traiter/FloraTraiter
-	$(PIP_INSTALL) -e ../../traiter/traiter_llm
+	$(PIP_INSTALL) -e ../../traiter/LabelTraiter
+	$(PIP_INSTALL) -e ../../traiter/llm
 	$(PIP_INSTALL) -e .[dev]
 	$(SPACY_MODEL)
 	pre-commit install

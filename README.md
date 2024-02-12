@@ -51,7 +51,7 @@ This repository contains scripts for training the
 We find labels with a custom trained YOLOv7 model (https://github.com/WongKinYiu/yolov7).
 
 - Labels that the model classified as typewritten are outlined in orange.
-- All other identified labels are outlined in teal.
+- Other identified labels are outlined in teal.
 - All label are extracted into their own image file.
 
 Scripts:
@@ -129,7 +129,7 @@ Scripts:
 
 ### Rule based trait extraction
 
-Repository: https://github.com/rafelafrance/FloraTraiter
+Repository: https://github.com/rafelafrance/LabelTraiter
 
 We are currently using a hierarchy of spaCy (https://spacy.io/) rule-based parsers to extract information from the labels. One level of parsers finds anchor words, another level of parsers finds common phrases around the anchor words, etc. until we have a final set of Darwin Core terms from that label.
 
@@ -141,29 +141,54 @@ I should be able to extract: (Colors correspond to the text above.)
 
 #### Parsing strategy
 
+
+The task is take text like this:
+```
+Herbarium of
+San Diego State College
+Erysimum capitatum (Dougl.) Greene.
+Growing on bank beside Calif. Riding and
+Hiking Trail north of Descanso.
+13 May 1967 San Diego Co., Calif.
+Coll: R.M. Beauchamp No. 484
+```
+And convert it into a machine-readable Darwin Core format like:
+```json
+{
+    "dwc:eventDate": "1967-05-13",
+    "dwc:verbatimEventDate": "13 May 1967",
+    "dwc:country": "United States",
+    "dwc:stateProvince": "California",
+    "dwc:county": "San Diego",
+    "dwc:recordNumber": "484",
+    "dwc:verbatimLocality": "Bank beside California, Riding and Hiking Trail north of Descanso",
+    "dwc:recordedBy": "R.M. Beauchamp",
+    "dwc:scientificNameAuthorship": "Dougl Greene",
+    "dwc:scientificName": "Erysimum capitatum (Dougl.) Greene",
+    "dwc:taxonRank": "species"
+}
+```
+Of course, the OCRed input text and the resulting JSON are not always this clean.
+
+#### Strategy
+
+LabelTraiter uses a multistep approach to parse text into traits. The rules themselves are written using spaCy, with enhancements we developed to streamline the rule building process. The general outline of the rule building process follows:
+
 1. Have experts identify relevant terms and target traits.
-2. We use expert identified terms to label terms using spaCy's phrase matchers. These are sometimes traits themselves but are more often used as anchors for more complex patterns of traits.
+2. We use expert identified terms to label terms using spaCy's phrase matchers. These are sometimes traits themselves, but are more often used as anchors for more complex patterns of traits.
 3. We then build up more complex terms from simpler terms using spaCy's rule-based matchers repeatedly until there is a recognizable trait. See the image below.
-4. We may then link traits to each other (entity relationships) using spaCy's dependency matchers.
+4. Depending on the trait we may then link traits to each other (entity relationships) using also spaCy rules.
    1. Typically, a trait gets linked to a higher level entity like SPECIES <--- FLOWER <--- {COLOR, SIZE, etc.} and not peer to peer like PERSON <---> ORG.
 
-For example, given the text: `Petiole 1-2 cm.`:
-- I recognize vocabulary terms like:
-    - `Petiole` is plant part
-    - `1` a number
-    - `-` a dash
-    - `2` a number
-    - `cm` is a unit notation
-- Then I group tokens. For instance:
-    - `1-2 cm` is a range with units which becomes a size trait.
-- Finally, I associate the size with the plant part `Petiole` by using another pattern matching parser. Spacy will build a labeled sentence dependency tree. We look for patterns in the tree to link traits with plant parts.
+As an example of parsing a locality is shown below:
 
-There are, of course, complications and subtleties not outlined above, but you should get the gist of what is going on here.
+![<img src="assets/locality_parsing.jpg" width="700" />](assets/locality_parsing.jpg)
 
-Scripts:
-- `parse-labels`: This takes the OCR text files and returns traits associated with the labels.
-- `parse-treatments`: Not relevant here, but this does the same with treatment extracted from PDFs or scraped from the web.
-- `add-taxa`: On the off chance that you want to update the catalog of plant taxa, you would use this utility.
+The rules can become complex and the vocabularies for things like taxa, or a gazetteer can be huge, but you should get the idea of what is involved in label parsing.
+
+LabelTraiter was originally developed to parse plant treatments and was later adapted to parse label text. As such, it does have some issues with parsing label text. When dealing with treatments the identification of traits/terms is fairly easy and the linking of traits to their proper plant part is only slightly more difficult.
+
+With labels, both the recognition of terms and linking them is difficult. There is often an elision of terms, museums or collectors may have their own abbreviations, and there is an inconsistent formatting of labels. Rule based-parsers are best at terms like dates, elevations, and latitudes/longitudes where the terms have recognizable structures, like numbers followed by units with a possible leading label. They are weakest is with vague terms like habitat, locality, or even names that require some sort of analysis of the context and meaning of the words.
 
 ### Large language model trait extraction
 
@@ -193,7 +218,11 @@ The old digi_leap repository was taking too long to clone, but I wanted to keep 
 
 #### https://github.com/rafelafrance/traiter.git
 
-This repository is used by the rule-based parser (FloraTraiter). It contains all the rules and code used by every rule-based parser. For plants, insects, mammals, etc.
+This is the base repository for all rule-based parsers. For plants, insects, mammals, etc.
+
+#### https://github.com/rafelafrance/FloraTraiter.git
+
+This is the base repository for all plant related rule-based parser.
 
 #### https://github.com/rafelafrance/common_utils.git
 
