@@ -18,9 +18,10 @@ We want to extract as much text information as possible from the labels. We are 
 ## Install
 You will need GIT to clone this repository. You will also need to have Python3.11+ installed, as well as pip, a package manager for Python.
 You can install the requirements into your python environment like so:
+
 ```bash
 git clone https://github.com/rafelafrance/digi-leap.git
-cd /path/to/traiter
+cd /path/to/digi-leap
 make install
 ```
 There are many moving parts to this project and I have broken this project into several smaller repositories. Some of these smaller repositories may have heavy requirements (like PyTorch) which can take a while to install.
