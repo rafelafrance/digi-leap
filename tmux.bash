@@ -1,9 +1,9 @@
 #!/bin/bash
 
 SESSION="digi-leap"
-DIGI="~/work/digi-leap"
-MISC="~/work/misc"
-TRAIT="~/work/traiter"
+DIGI="$HOME/work/digi-leap"
+MISC="$HOME/work/misc"
+TRAIT="$HOME/work/traiter"
 
 tmux new -s $SESSION -d
 tmux rename-window -t $SESSION digi
